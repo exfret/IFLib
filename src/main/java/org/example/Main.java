@@ -1,52 +1,125 @@
 package org.example;
 
 import javafx.application.Application;
+import javafx.beans.property.ReadOnlyStringWrapper;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.iflib.Resource;
 
-import java.util.Objects;
+import java.net.URL;
 
 public class Main extends Application {
 
+    private final ObservableList<Resource> resources =
+            FXCollections.observableArrayList(
+                    new Resource("gold", "Gold"),
+                    new Resource("food", "Food"),
+                    new Resource("wood", "Wood")
+            );
+
     private Label storyText;
     private HBox choices;
+    private TableView<Resource> resourceTable;
 
     @Override
     public void start(Stage stage) {
+        Tab storyTab = createStoryTab();
+        Tab resourcesTab = createResourcesTab();
+
+        TabPane tabPane = new TabPane(storyTab, resourcesTab);
+        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+
+        Scene scene = new Scene(tabPane, 720, 480);
+
+        URL stylesheet = getClass().getResource("/style.css");
+
+        if (stylesheet != null) {
+            scene.getStylesheets().add(stylesheet.toExternalForm());
+        }
+
+        showBeginning();
+
+        stage.setTitle("IFLib");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    private Tab createStoryTab() {
         Label title = new Label("The Dark Forest");
         title.getStyleClass().add("title");
 
         storyText = new Label();
-        storyText.getStyleClass().add("story-text");
         storyText.setWrapText(true);
-        VBox.setVgrow(storyText, Priority.ALWAYS);
+        storyText.getStyleClass().add("story-text");
 
         choices = new HBox(12);
         choices.setAlignment(Pos.CENTER_LEFT);
 
-        VBox root = new VBox(20, title, storyText, choices);
-        root.setPadding(new Insets(32));
-        root.getStyleClass().add("story-screen");
-
-        Scene scene = new Scene(root, 720, 480);
-        scene.getStylesheets().add(
-                Objects.requireNonNull(
-                        getClass().getResource("/style.css")
-                ).toExternalForm()
+        VBox storyLayout = new VBox(
+                20,
+                title,
+                storyText,
+                choices
         );
 
-        showBeginning();
+        storyLayout.setPadding(new Insets(32));
+        storyLayout.getStyleClass().add("story-screen");
 
-        stage.setTitle("Our Story");
-        stage.setScene(scene);
-        stage.show();
+        VBox.setVgrow(storyText, Priority.ALWAYS);
+
+        return new Tab("Story", storyLayout);
+    }
+
+    private Tab createResourcesTab() {
+        resourceTable = new TableView<>(resources);
+
+        resourceTable.setPlaceholder(
+                new Label("No resources")
+        );
+
+        resourceTable.setColumnResizePolicy(
+                TableView.CONSTRAINED_RESIZE_POLICY
+        );
+
+        TableColumn<Resource, String> nameColumn =
+                new TableColumn<>("Resource");
+
+        nameColumn.setCellValueFactory(cell ->
+                new ReadOnlyStringWrapper(
+                        cell.getValue().toString()
+                )
+        );
+
+        TableColumn<Resource, String> amountColumn =
+                new TableColumn<>("Amount");
+
+        amountColumn.setCellValueFactory(cell ->
+                new ReadOnlyStringWrapper(
+                        cell.getValue().getValue()
+                )
+        );
+
+        amountColumn.setStyle(
+                "-fx-alignment: CENTER-RIGHT;"
+        );
+
+        resourceTable.getColumns().add(nameColumn);
+        resourceTable.getColumns().add(amountColumn);
+
+        VBox resourcesLayout = new VBox(resourceTable);
+        resourcesLayout.setPadding(new Insets(24));
+
+        VBox.setVgrow(resourceTable, Priority.ALWAYS);
+
+        return new Tab("Resources", resourcesLayout);
     }
 
     private void showBeginning() {
@@ -68,14 +141,14 @@ public class Main extends Application {
 
     private void showHome() {
         showPage(
-                "You return home safely, although you never discover what made the sound.",
+                "You return home safely.",
                 choice("Start again", this::showBeginning)
         );
     }
 
     private void showKeyEnding() {
         showPage(
-                "The dragon lets you take the key. What it opens remains a mystery.",
+                "The dragon allows you to take the mysterious silver key.",
                 choice("Start again", this::showBeginning)
         );
     }
@@ -89,11 +162,18 @@ public class Main extends Application {
 
     private Button choice(String text, Runnable action) {
         Button button = new Button(text);
-        button.setOnAction(event -> action.run());
+
+        button.setOnAction(event ->
+                action.run()
+        );
+
         return button;
     }
 
-    private void showPage(String text, Button... buttons) {
+    private void showPage(
+            String text,
+            Button... buttons
+    ) {
         storyText.setText(text);
         choices.getChildren().setAll(buttons);
     }

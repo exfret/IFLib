@@ -38,4 +38,11 @@ public class Resource {
      */
     public String toString() { return displayName; }
 
+    public void addAmount(double change) {
+        amount += change;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
 }
