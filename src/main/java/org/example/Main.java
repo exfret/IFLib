@@ -12,8 +12,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
 import org.iflib.Resource;
 import org.iflib.Resources;
+import org.iflib.ResourceLoader;
 
 import java.net.URL;
 
@@ -30,6 +32,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
+        resources = ResourceLoader.load("/resources.txt");
+
         Tab storyTab = createStoryTab();
         Tab resourcesTab = createResourcesTab();
 
