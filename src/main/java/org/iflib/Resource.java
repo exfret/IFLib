@@ -10,7 +10,6 @@ public class Resource {
         this.displayName = displayName;
     }
 
-
     /**
      *
      * @return The amount of this resource the user has
