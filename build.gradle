@@ -4,6 +4,10 @@ plugins {
     id 'org.openjfx.javafxplugin' version '0.1.0'
 }
 
+application {
+    mainClass = 'org.example.Main'
+}
+
 javafx {
     version = '25.0.1'
     modules = ['javafx.controls', 'javafx.fxml']

@@ -1,0 +1,38 @@
+.root {
+    -fx-font-family: "Avenir Next", "Helvetica Neue", sans-serif;
+}
+
+.story-screen {
+    -fx-background-color: #171923;
+}
+
+.title {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f7fafc;
+}
+
+.story-text {
+    -fx-font-family: "Georgia";
+    -fx-font-size: 20px;
+    -fx-line-spacing: 8px;
+    -fx-text-fill: #e2e8f0;
+}
+
+.button {
+    -fx-background-color: #6c63ff;
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-padding: 10px 18px;
+    -fx-background-radius: 8px;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #817aff;
+}
+
+.button:pressed {
+    -fx-background-color: #5750d8;
+}
