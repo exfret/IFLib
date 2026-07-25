@@ -24,8 +24,13 @@ public final class Resources {
      *
      * @return A list of Resource objects for every initialized resource
      */
-    public static Object[] getResources() {
-        return resources.values().toArray();
+    public static Resource[] getResources() {
+        Object[] objs = resources.values().toArray();
+        Resource[] res = new Resource[objs.length];
+
+        for (int i = 0;i < objs.length;i ++) res[i] = (Resource) objs[i];
+
+        return res;
     }
 
     /**

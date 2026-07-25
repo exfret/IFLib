@@ -13,6 +13,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.iflib.Resource;
+import org.iflib.Resources;
 
 import java.net.URL;
 
@@ -20,9 +21,7 @@ public class Main extends Application {
 
     private final ObservableList<Resource> resources =
             FXCollections.observableArrayList(
-                    new Resource("gold", "Gold"),
-                    new Resource("food", "Food"),
-                    new Resource("wood", "Wood")
+                    Resources.getResources()
             );
 
     private Label storyText;
