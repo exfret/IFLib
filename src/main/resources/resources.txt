@@ -1,0 +1,9 @@
+# Resource definitions
+# Format: id|display name
+
+gold|Gold
+food|Food
+wood|Wood
+stone|Stone
+brothers|Brothers
+bees|Bees
